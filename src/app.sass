@@ -1,0 +1,225 @@
+@import url('https://fonts.googleapis.com/css2?family=Lobster+Two:ital@1&display=swap')
+@import url('https://fonts.googleapis.com/css2?family=PT+Mono&display=swap')
+:root
+    --main-gradient-color: linear-gradient(45deg, #b50333, #0b2ab4)
+$white: #fff
+$dark-grey-2: #222
+$twitterIcon: './assets/icons8-twitter-48.svg'
+$twitterIconAnimated: './assets/icons8-twitter.gif'
+
+// MEDIA QUERY MANAGER
+/*
+ 0 - 900:    Tablet portrait
+ 900 - 1100:    Tablet landscape
+ 1200+ is where our normal styles apply
+ $breakpoint arguement choices: 
+ - tab-port
+ - tab-land
+ 1em = 16px
+
+@mixin respond($breakpoint)
+    @if $breakpoint == tab-port
+        @media only screen and ( max-width: 56.25em ) //900px/16
+            @content
+    @if $breakpoint == tab-land
+        @media only screen and ( max-width: 68.75em  )
+            @content
+
+// gradient  background common style
+%animated-bg
+    background-image: var(--main-gradient-color)
+    background-size: 500%
+    background-position: 0 0
+    animation: move-bg 60s linear infinite
+
+@keyframes move-bg
+    from
+        background-position: 0 0
+    to
+        background-position: 100% 100%
+
+// roll-in and roll-out animtaion 
+@keyframes change-quote
+    0%
+        transform: rotate(0deg) translateX(0) translateY(0)
+        opacity: 1
+
+    25%
+        transform-origin: bottom
+        transform: rotate(20deg) translateX(100%) translateY(100%)
+        opacity: 0
+    26%
+        transform: rotate(-45deg) translateX(-100%) translateY(-100%)
+        opacity: 0
+
+    100%
+        transform: rotate(0deg) translateX(0) translateY(0)
+        opacity: 1
+
+// loading animaton
+@keyframes rotate-3
+    from
+        transform: rotate(0deg)
+    to
+        transform: rotate(360deg)
+
+*
+    margin: 0
+    padding: 0
+
+#root
+    width: 100vw
+    height: 100vh
+    display: flex
+    justify-content: center
+    align-items: center
+
+    overflow: hidden
+
+    // move-bg aniamtion 
+    @extend %animated-bg
+
+.change
+    animation: change-quote 1s ease-in-out 1
+
+.quote-box
+
+    background-color: white
+    border-radius: 12px
+    box-shadow: 1px 1px 10px white
+    padding: 2.4rem 0
+
+    width: 50%
+
+    display: grid
+    grid-template-columns: repeat( 2 , [col-start] 1fr [col-end] )
+    grid-template-rows: 1fr repeat( 2 , .5fr )
+    justify-content: center
+    align-items: center
+    row-gap: 2rem
+
+    @include respond(tab-land)
+        width: 68%
+        row-gap: 1rem
+        padding: 2rem 0
+
+    @include respond(tab-port)
+        width: 80%
+
+    .quote
+        &-text,&-author
+            @extend %animated-bg
+            -webkit-background-clip: text
+            color: transparent
+
+        &-text
+            grid-column: col-start 1 / col-end 2
+
+            font-family: 'Lobster Two', cursive
+            line-height: 1.5rem
+            text-transform: capitalize
+            letter-spacing: 1px
+            padding: 0 3.125rem
+
+            @include respond(tab-port)
+                padding: 0px 2rem
+
+        &-author
+            grid-column: col-start 2 / col-end 2
+            justify-self: center
+            font-family: 'PT Mono', monospace
+
+    .actions
+        grid-column: col-start 1 / col-end 2
+
+        display: flex
+        justify-content: space-evenly
+
+    .btn
+        &:active
+            transform: scale(.9)
+
+        &-tweet
+            grid-column: col-start 1 / col-end 1
+            width: 48px
+            height: 48px
+            background: url($twitterIcon) center / cover
+            &:hover
+                background: url($twitterIconAnimated) center / cover
+                transition: .3s
+
+        &-next
+            text-decoration: none
+            font-family: 'PT Mono', monospace
+            padding: 1rem
+            position: relative
+            overflow: hidden
+            background: none
+            outline: none
+            color: transparent
+            border-radius: 100px
+            border: 2px outset ThreeDLightShadow //firefox default
+
+            &::before,&::after
+                background-color: $dark-grey-2
+                content: 'Next Quote'
+                color: $white
+
+                position: absolute
+                top: 0
+                left: 0
+                width: 100%
+                height: 100%
+
+                display: flex
+                justify-content: center
+                align-items: center
+
+                transition: all .6s
+
+                @extend %animated-bg
+            &::after
+                left: -100%
+                opacity: 0
+                transform: scale(0) rotateY(360deg)
+
+            &:hover
+                &::before
+                    left: 100% //animation begin
+                    transform: scale(0) rotateY(360deg)
+                    opacity: 0
+                &::after
+                    left: 0 //animation begin
+                    transform: scale(1) rotateY(0deg)
+                    opacity: 1
+
+//loiding screen animation
+.loading
+    width: 100vw
+    height: 100vh
+    display: flex
+    align-items: center
+    justify-content: center
+    box-sizing: border-box
+    background-color: $white
+    .container
+        position: relative
+        width: 200px
+        height: 200px
+        .text
+            position: absolute
+            top: 0
+            left: 0
+            width: 100%
+            height: 100%
+            text-align: center
+            line-height: 200px
+            font-size: 22px
+            font-weight: bold
+            text-transform: uppercase
+        .ring
+            width: 100%
+            height: 100%
+            border-left: 4px solid #262626
+            border-radius: 50%
+            animation: rotate-3 1s linear infinite
