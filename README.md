@@ -8,8 +8,7 @@ This is a solution to the [Build a Random Quote Machine](https://www.freecodecam
 
 ## ✨ Demo
 
-![Mobile Layout]()
-![TAblet Layout]()
+![demo](./random_quote_preview.gif)
 
 ## 🚀 Usage
 
